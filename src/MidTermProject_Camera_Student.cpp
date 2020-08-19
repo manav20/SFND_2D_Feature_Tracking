@@ -62,8 +62,17 @@ int main(int argc, const char *argv[])
         // push image into data frame buffer
         DataFrame frame;
         frame.cameraImg = imgGray;
-        dataBuffer.push_back(frame);
-
+        
+        // implementing ring buffer
+        if (dataBuffer.size() < dataBufferSize) {
+            dataBuffer.push_back(frame);
+        }
+        else {
+            for ( int i = 0; i < dataBufferSize-1; i++) {
+                dataBuffer[i] = dataBuffer[i+1];
+            }
+            dataBuffer.back() = frame;
+        }
         //// EOF STUDENT ASSIGNMENT
         cout << "#1 : LOAD IMAGE INTO BUFFER done" << endl;
 
